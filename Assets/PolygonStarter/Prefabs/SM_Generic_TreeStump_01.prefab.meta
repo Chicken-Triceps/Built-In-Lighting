@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: e865a10713e46984aba70d89a679e42f
+timeCreated: 1572322130
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 156819
+  packageName: Starter Pack - Synty POLYGON - Stylized Low Poly 3D Art
+  packageVersion: 1.0.2
+  assetPath: Assets/PolygonStarter/Prefabs/SM_Generic_TreeStump_01.prefab
+  uploadId: 731859

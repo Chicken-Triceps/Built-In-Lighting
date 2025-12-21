@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: d2201b576d0da384fb8f681e57559ea8
+timeCreated: 1572322126
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 156819
+  packageName: Starter Pack - Synty POLYGON - Stylized Low Poly 3D Art
+  packageVersion: 1.0.2
+  assetPath: Assets/PolygonStarter/Prefabs/SM_Generic_Mountains_Grass_02.prefab
+  uploadId: 731859

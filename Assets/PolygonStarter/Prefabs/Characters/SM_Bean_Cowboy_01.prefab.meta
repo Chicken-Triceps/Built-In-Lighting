@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: e332982425ee2ec48b168979bb7b43f5
+timeCreated: 1572322127
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 156819
+  packageName: Starter Pack - Synty POLYGON - Stylized Low Poly 3D Art
+  packageVersion: 1.0.2
+  assetPath: Assets/PolygonStarter/Prefabs/Characters/SM_Bean_Cowboy_01.prefab
+  uploadId: 731859

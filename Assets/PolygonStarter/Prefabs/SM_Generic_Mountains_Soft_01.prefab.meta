@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: a114301c17a8f9d4e87a828e20f894a2
+timeCreated: 1572322127
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 156819
+  packageName: Starter Pack - Synty POLYGON - Stylized Low Poly 3D Art
+  packageVersion: 1.0.2
+  assetPath: Assets/PolygonStarter/Prefabs/SM_Generic_Mountains_Soft_01.prefab
+  uploadId: 731859

@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: a76742b3f592d834ca1e03ad08301998
+timeCreated: 1572322126
+licenseType: Store
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 156819
+  packageName: Starter Pack - Synty POLYGON - Stylized Low Poly 3D Art
+  packageVersion: 1.0.2
+  assetPath: Assets/PolygonStarter/Prefabs/SM_Generic_Small_Rocks_02.prefab
+  uploadId: 731859
