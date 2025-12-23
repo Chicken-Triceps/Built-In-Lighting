@@ -81,13 +81,35 @@ def main():
 
     data = response.json()
     
+    # ... (위쪽 코드는 그대로)
+    
+    response = requests.post(
+        "https://api.github.com/graphql",
+        json={"query": query_to_run, "variables": {"owner": OWNER, "number": PROJECT_NUMBER}},
+        headers=headers
+    )
+
+    # ------------------ [수정할 부분 시작] ------------------
+    if response.status_code != 200:
+        print(f"Error: {response.text}")
+        return
+
+    data = response.json()
+    
+    # 🔍 [여기가 핵심] 에러가 있다면 내용을 출력하고 종료
+    if 'errors' in data:
+        print("🚨 GitHub API 반환 에러:")
+        print(data['errors'])
+        return
+
     # 데이터 파싱 경로 (User 기준)
     try:
         project_items = data['data']['user']['projectV2']['items']['nodes']
-    except TypeError:
-        # User가 아니라 Organization일 경우 경로가 다를 수 있음, 혹은 데이터 없음
-        print("데이터를 찾을 수 없습니다. Owner 타입(User/Org)을 확인하세요.")
+    except (TypeError, KeyError) as e:
+        print(f"데이터 구조 에러: {e}")
+        print("받은 데이터:", data) # 어떤 데이터가 왔는지 눈으로 확인
         return
+    # ------------------ [수정할 부분 끝] ------------------
 
     today_schedule = []
 
