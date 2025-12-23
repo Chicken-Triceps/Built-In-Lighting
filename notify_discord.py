@@ -12,7 +12,8 @@ PROJECT_NUMBER = 4            # URL 끝에 있는 숫자 (projects/4)
 START_DATE_FIELD = "Initial Date" # 필드명
 END_DATE_FIELD = "End Date"
 
-# --- GraphQL 쿼리 ---
+# --- GraphQL 쿼리 (수정된 부분) ---
+# field { name } 대신 ... on ProjectV2FieldCommon { name } 을 사용해야 함
 QUERY = """
 query($owner: String!, $number: Int!) {
   user(login: $owner) {
@@ -28,7 +29,9 @@ query($owner: String!, $number: Int!) {
             nodes {
               ... on ProjectV2ItemFieldDateValue {
                 date
-                field { name }
+                field {
+                  ... on ProjectV2FieldCommon { name }
+                }
               }
             }
           }
@@ -102,6 +105,8 @@ def main():
         
         for field in item['fieldValues']['nodes']:
             if not field: continue
+            
+            # 여기서 필드 이름을 가져오는 방식
             field_name = field.get('field', {}).get('name')
             date_value = field.get('date')
             
