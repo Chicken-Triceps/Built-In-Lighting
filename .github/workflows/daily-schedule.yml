@@ -3,7 +3,7 @@ name: Daily Project Schedule Notification
 on:
   schedule:
     # 매일 UTC 00:00 실행 (= 한국 시간 09:00)
-    - cron: '0 7 * * *'
+    - cron: '0 0 * * *'
   workflow_dispatch: # 수동 실행 테스트용 버튼 추가
 
 jobs:
