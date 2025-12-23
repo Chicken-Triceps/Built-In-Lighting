@@ -2,21 +2,20 @@ import os
 import requests
 from datetime import datetime, timezone, timedelta
 
-# --- 설정 정보 (환경변수에서 로드) ---
+# --- 설정 정보 ---
 TOKEN = os.environ.get("PROJECT_PAT")
 WEBHOOK_URL = os.environ.get("DISCORD_WEBHOOK_URL")
 
 # GitHub Project 정보
 OWNER = "Chicken-Triceps"     # 사용자명
 PROJECT_NUMBER = 4            # URL 끝에 있는 숫자 (projects/4)
-START_DATE_FIELD = "Initial Date" # 방금 만든 필드명과 똑같이
+START_DATE_FIELD = "Initial Date" # 필드명
 END_DATE_FIELD = "End Date"
 
 # --- GraphQL 쿼리 ---
-# 프로젝트의 아이템과 필드 값을 가져오는 쿼리
 QUERY = """
 query($owner: String!, $number: Int!) {
-  user(login: $owner) { # 조직인 경우 user 대신 organization(login: $owner) 로 변경
+  user(login: $owner) {
     projectV2(number: $number) {
       items(first: 100) {
         nodes {
@@ -41,10 +40,9 @@ query($owner: String!, $number: Int!) {
 """
 
 def send_discord_message(items):
-    if not items:
-        return # 알림할 내용이 없으면 전송 안 함 (옵션)
+    if not items: return
 
-    # 메시지 포맷팅
+    # 한국 시간 기준 오늘 날짜
     today_str = datetime.now(timezone(timedelta(hours=9))).strftime("%Y-%m-%d")
     message = f"## 📅 {today_str} 오늘의 일정 알림\n"
     
@@ -53,8 +51,7 @@ def send_discord_message(items):
         url = item.get('url', 'URL 없음')
         message += f"- **{title}**: {url}\n"
 
-    payload = {"content": message}
-    requests.post(WEBHOOK_URL, json=payload)
+    requests.post(WEBHOOK_URL, json={"content": message})
 
 def main():
     # 1. 현재 한국 시간(KST) 구하기
@@ -63,15 +60,9 @@ def main():
     # 2. GitHub API 호출
     headers = {"Authorization": f"Bearer {TOKEN}"}
     
-    # 조직(Organization) 프로젝트라면 쿼리의 'user'를 'organization'으로 바꿔야 합니다.
-    # 아래 코드는 'user' 기준으로 작성되었습니다.
-    query_to_run = QUERY 
-    if "organization" in QUERY and "user" not in QUERY:
-         pass # 이미 수정됨
-    
     response = requests.post(
         "https://api.github.com/graphql",
-        json={"query": query_to_run, "variables": {"owner": OWNER, "number": PROJECT_NUMBER}},
+        json={"query": QUERY, "variables": {"owner": OWNER, "number": PROJECT_NUMBER}},
         headers=headers
     )
     
@@ -81,35 +72,19 @@ def main():
 
     data = response.json()
     
-    # ... (위쪽 코드는 그대로)
-    
-    response = requests.post(
-        "https://api.github.com/graphql",
-        json={"query": query_to_run, "variables": {"owner": OWNER, "number": PROJECT_NUMBER}},
-        headers=headers
-    )
-
-    # ------------------ [수정할 부분 시작] ------------------
-    if response.status_code != 200:
-        print(f"Error: {response.text}")
-        return
-
-    data = response.json()
-    
-    # 🔍 [여기가 핵심] 에러가 있다면 내용을 출력하고 종료
+    # 🚨 에러 체크 로직
     if 'errors' in data:
         print("🚨 GitHub API 반환 에러:")
         print(data['errors'])
         return
 
-    # 데이터 파싱 경로 (User 기준)
+    # 데이터 파싱
     try:
         project_items = data['data']['user']['projectV2']['items']['nodes']
     except (TypeError, KeyError) as e:
         print(f"데이터 구조 에러: {e}")
-        print("받은 데이터:", data) # 어떤 데이터가 왔는지 눈으로 확인
+        print("받은 데이터:", data)
         return
-    # ------------------ [수정할 부분 끝] ------------------
 
     today_schedule = []
 
@@ -118,17 +93,15 @@ def main():
         title = "제목 없음"
         url = ""
         
-        # Content(이슈/PR) 정보 가져오기
         if item.get('content'):
             title = item['content'].get('title', '제목 없음')
             url = item['content'].get('url', '')
         
-        # 날짜 필드 확인
         start_date = None
         end_date = None
         
         for field in item['fieldValues']['nodes']:
-            if not field: continue # 빈 필드 스킵
+            if not field: continue
             field_name = field.get('field', {}).get('name')
             date_value = field.get('date')
             
@@ -137,8 +110,6 @@ def main():
             elif field_name == END_DATE_FIELD:
                 end_date = datetime.strptime(date_value, "%Y-%m-%d").date()
         
-        # 날짜 로직: Start <= Today <= End
-        # End Date가 없으면 Start Date 당일만 체크하는 로직으로 변경 가능
         if start_date:
             effective_end = end_date if end_date else start_date
             if start_date <= kst_now <= effective_end:
