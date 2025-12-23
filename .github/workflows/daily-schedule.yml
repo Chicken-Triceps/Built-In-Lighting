@@ -1,0 +1,30 @@
+name: Daily Project Schedule Notification
+
+on:
+  schedule:
+    # 매일 UTC 00:00 실행 (= 한국 시간 09:00)
+    - cron: '0 0 * * *'
+  workflow_dispatch: # 수동 실행 테스트용 버튼 추가
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install Dependencies
+        run: |
+          pip install requests
+
+      - name: Run Notification Script
+        env:
+          PROJECT_PAT: ${{ secrets.PROJECT_PAT }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: |
+          python notify_discord.py
