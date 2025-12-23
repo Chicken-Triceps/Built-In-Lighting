@@ -8,7 +8,7 @@ WEBHOOK_URL = os.environ.get("DISCORD_WEBHOOK_URL")
 
 # GitHub Project 정보
 OWNER = "Chicken-Triceps"     # 사용자명
-PROJECT_NUMBER = 1            # URL 끝에 있는 숫자 (projects/4)
+PROJECT_NUMBER = 4            # URL 끝에 있는 숫자 (projects/4)
 START_DATE_FIELD = "Start Date" # 방금 만든 필드명과 똑같이
 END_DATE_FIELD = "End Date"
 
